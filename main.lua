@@ -6,6 +6,7 @@ function love.load()
     isWalking = false
     x_pos = 300 
     y_pos = 200
+    facingRight = true
     --load spritesheet and background image
     local image = love.graphics.newImage("adventurer-sheet-2.png")
     background = love.graphics.newImage("orig.png")
@@ -31,7 +32,11 @@ function love.draw()
     end
     --if isWalking is true, then draw the walking animation
     if isWalking and not isIdling then
-        love.graphics.draw(walk_animation.spriteSheet, walk_animation.walkingQuads[walkSpriteNum],x_pos,y_pos,0,1.8)
+        local scaleX = 1.8
+        if not facingRight then
+            scaleX = -1.8 -- Flip horizontally when facing left
+        end
+        love.graphics.draw(walk_animation.spriteSheet, walk_animation.walkingQuads[walkSpriteNum],x_pos,y_pos,0,scaleX,1.8)
     end
 end
 
@@ -45,20 +50,24 @@ function love.update(dt)
     end
 
     -- Update walking animation time
-    walk_animation.currentTime = walk_animation.currentTime + dt
-    if walk_animation.currentTime >= walk_animation.duration then
-        walk_animation.currentTime = walk_animation.currentTime - walk_animation.duration
-    end 
+    if isWalking then
+        walk_animation.currentTime = walk_animation.currentTime + dt
+        if walk_animation.currentTime >= walk_animation.duration then
+            walk_animation.currentTime = walk_animation.currentTime - walk_animation.duration
+        end 
+    end
     
     -- Check for walking input
     if love.keyboard.isDown("d") then
         isIdling = false
         isWalking = true
         x_pos = x_pos + 2 -- Adjust this value for movement speed
+        facingRight = true
     elseif love.keyboard.isDown("a") then
         isIdling = false
         isWalking = true
         x_pos = x_pos - 2 -- Adjust this value for movement speed
+        facingRight = false
     else
         isIdling = true
         isWalking = false
