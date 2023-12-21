@@ -33,4 +33,20 @@ function animations.WalkingAnimation(image,duration)
     return animation
 end
 
+function animations.FightingAnimation(image,duration)
+    local animation = {}
+    animation.spriteSheet = image;
+    animation.fightingQuads = {}
+    
+    table.insert(animation.fightingQuads,love.graphics.newQuad(10,269,22,33,image:getDimensions()))
+    table.insert(animation.fightingQuads,love.graphics.newQuad(39,264,41,33,image:getDimensions()))
+    table.insert(animation.fightingQuads,love.graphics.newQuad(84,269,36,33,image:getDimensions()))
+    table.insert(animation.fightingQuads,love.graphics.newQuad(119,269,34,33,image:getDimensions()))
+
+    animation.duration = duration or 1
+    animation.currentTime = 0
+
+    return animation    
+end
+
 return animations
